@@ -1,0 +1,43 @@
+services:
+  api:
+    build: .
+    image: retail-intelligence
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data/processed:/app/data/processed:ro
+      - ./models:/app/models:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  dashboard:
+    build: .
+    image: retail-intelligence
+    command: streamlit run app/dashboard.py --server.port 8501 --server.address 0.0.0.0 --server.headless true
+    ports:
+      - "8501:8501"
+    environment:
+      STREAMLIT_BROWSER_GATHER_USAGE_STATS: "false"
+    volumes:
+      - ./data/processed:/app/data/processed:ro
+      - ./reports:/app/reports:ro
+    restart: unless-stopped
+
+  # Pipeline complet (ingestion -> entrainement -> backtest), a lancer a la demande :
+  #   docker compose run --rm pipeline
+  # Prerequis : CSV Kaggle dans data/raw/. Arretez l'API avant (verrou DuckDB).
+  pipeline:
+    build: .
+    image: retail-intelligence
+    profiles: ["pipeline"]
+    command: sh -c "python src/ingest.py && python src/train.py && python src/backtest.py"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./reports:/app/reports

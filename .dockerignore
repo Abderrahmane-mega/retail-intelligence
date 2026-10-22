@@ -1,0 +1,12 @@
+.venv/
+.git/
+__pycache__/
+*.pyc
+data/
+models/
+reports/
+notebooks/
+tests/
+*.duckdb
+*.parquet
+.pytest_cache/
