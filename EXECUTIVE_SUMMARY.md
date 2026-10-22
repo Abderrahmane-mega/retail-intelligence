@@ -1,6 +1,6 @@
 # Retail Intelligence : prévision de la demande et optimisation des stocks
 
-**Auteur :** [Votre nom] · **Dépôt :** [lien GitHub]
+**Auteur :** Abderrahmane Azzou · **Dépôt :** [github.com/Abderrahmane-mega/retail-intelligence](https://github.com/Abderrahmane-mega/retail-intelligence)
 
 ## Problème
 
