@@ -1,0 +1,17 @@
+# Environnements et caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+
+# Données (non redistribuables), base DuckDB et prévisions
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+*.duckdb
+*.parquet
+
+# Modèles entraînés (reproductibles avec train.py)
+models/
